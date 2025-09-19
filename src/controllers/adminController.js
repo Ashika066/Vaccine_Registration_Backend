@@ -8,14 +8,19 @@ import jwt from "jsonwebtoken";
 export const adminLogin = async (req, res) => {
   try {
     const { username, password } = req.body;
+
+    // check for missing credentials
     if (!username || !password) return res.status(400).json({ message: "Username and password required" });
 
+    // find admin by username
     const admin = await Admin.findOne({ username });
     if (!admin) return res.status(401).json({ message: "Invalid credentials" });
 
+    // Compare input password with stored hashed password
     const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
 
+    // Generate JWT token with 1 day expiry
     const token = jwt.sign({ id: admin._id, username: admin.username, isAdmin: true }, process.env.JWT_SECRET, { expiresIn: "1d" });
     res.json({ token });
   } catch (err) {
@@ -23,7 +28,7 @@ export const adminLogin = async (req, res) => {
   }
 };
 
-// Get users with optional filters age, pincode, vaccinationStatus
+// admin can filtered users by optional age, pincode, vaccinationStatus query parameters
 export const getUsers = async (req, res) => {
   try {
     const { age, pincode, vaccinationStatus } = req.query;
@@ -63,6 +68,7 @@ export const getSlotsReport = async (req, res) => {
     const secondDoseCount = secondDoseSlots.reduce((sum, slot) => sum + slot.registeredUsers.length, 0);
     const totalCount = firstDoseCount + secondDoseCount;
 
+    // return json report
     res.json({ date, firstDoseCount, secondDoseCount, totalCount });
   } catch (err) {
     res.status(500).json({ message: "Server error" });

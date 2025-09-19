@@ -3,7 +3,7 @@ import Slot from "../models/Slot.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-// Register User
+// Register a new User
 export const registerUser = async (req, res) => {
     try {
         const { name, phoneNumber, password, age, pincode, aadhaarNo } = req.body;
@@ -49,7 +49,7 @@ export const loginUser = async (req, res) => {
     }
 };
 
-// Get available slots
+// Get available vaccination slots for the user based on vaccination status
 export const getAvailableSlots = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -74,7 +74,7 @@ export const getAvailableSlots = async (req, res) => {
   }
 };
 
-// Register slot with capacity check
+// Register user to a chosen slot after validations
 export const registerSlot = async (req, res) => {
   try {
     const { slotId } = req.body;

@@ -8,16 +8,21 @@ dotenv.config();
 const createAdmin = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
-    const password = "adminpass";  // give random admin password
+    const password = "adminpass";  // give random admin password (can change manually)
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // create an admin user with hashed password
     const admin = new Admin({
-      username: "admin", // give random admin username
+      username: "admin", // give random admin username (can change manually)
       password: hashedPassword,
     });
 
+    // save admin user to database
     await admin.save();
+
     console.log("Admin user created");
+
+    // Disconnect from database after creation (as we created only 1 admin)
     mongoose.disconnect();
   } catch (err) {
     console.error(err);

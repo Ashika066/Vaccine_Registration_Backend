@@ -1,7 +1,7 @@
 import cron from "node-cron";
 import User from "../models/User.js";
 
-// Runs every hour
+// Cron jobs Runs every hour to update the data
 const updateVaccinationStatusJob = cron.schedule("0 * * * *", async () => {
   const now = new Date();
 
