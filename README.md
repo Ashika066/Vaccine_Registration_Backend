@@ -1,8 +1,7 @@
 # Vaccine Registration Backend API
 
 ## Project Overview
-
-This project implements a backend system for a vaccine registration app, similar to ArogyaSetu/Cowin, using Node.js and MongoDB Atlas. It provides APIs for user registration, vaccine slot booking, slot management, and admin reporting functionalities.
+This backend API is for a vaccine registration system similar to Cowin/ArogyaSetu apps. It allows user registration, login, vaccine slot booking, slot updation, and admin reporting with authentication.
 
 ---
 
@@ -17,22 +16,62 @@ This project implements a backend system for a vaccine registration app, similar
 
 ---
 
-## Features
+## APIs and Their Functionalities
 
 ### User APIs
 
-- Register a user with mandatory fields (Name, PhoneNumber, Age, Pincode, Aadhaar No)
-- User login via PhoneNumber and password
-- View available vaccine slots based on vaccination status (first/second dose)
-- Register for a vaccine slot (first or second dose) with slot capacity constraints
-- Update/change an already registered slot (allowed till 24 hours before slot time)
-- Automatic vaccination status updates when slot times lapse (via cron job)
+- **POST /api/user/register**  
+  Registers a new user with fields: name, phoneNumber, password, age, pincode, aadhaarNo.
+
+- **POST /api/user/login**  
+  Authenticates user by phone number and password; returns JWT token.
+
+- **GET /api/user/slots**  
+  Fetches available vaccine slots based on user's vaccination status (first dose or second dose).
+
+- **POST /api/user/slots/register**  
+  Register user to a preferred slot ensuring capacity and dose eligibility.
+
+- **PUT /api/user/slots/update**  
+  Update user's previously registered slot if more than 24 hours before slot time.
+
+---
 
 ### Admin APIs
 
-- Admin login (credentials are manually created; no public registration)
-- View all users with filtering options by Age, Pincode, Vaccination Status
-- View daily reports of registered slots for first dose, second dose, and total users
+- **POST /api/admin/login**  
+  Admin authentication (credentials pre-created manually); returns JWT token.
+
+- **GET /api/admin/users**  
+  Fetches list of users filtered by query parameters: age, pincode, vaccinationStatus.
+
+- **GET /api/admin/slots/report?date=YYYY-MM-DD**  
+  Generates a report of registered slots (first dose, second dose, total) for a given day.
+
+---
+
+## Data Models
+
+### User
+- `name`: String
+- `phoneNumber`: String (unique)
+- `password`: String (hashed)
+- `age`: Number
+- `pincode`: String
+- `aadhaarNo`: String
+- `vaccinationStatus`: Enum (none, firstDoseDone, fullyVaccinated)
+- `firstDoseSlot`: Date (slot registered for first dose)
+- `secondDoseSlot`: Date (slot registered for second dose)
+
+### Slot
+- `date`: Date (slot date and time)
+- `doseType`: Enum (firstDose, secondDose)
+- `capacity`: Number (max users per slot)
+- `registeredUsers`: Array of User references
+
+### Admin
+- `username`: String (unique)
+- `password`: String (hashed)
 
 ---
 
