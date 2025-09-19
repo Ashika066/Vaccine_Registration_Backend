@@ -93,3 +93,6 @@ This backend API is for a vaccine registration system similar to Cowin/ArogyaSet
 - Node.js installed (v14+ recommended)
 - MongoDB Atlas account and cluster created
 - Environment variables configured in `.env` file:
+
+
+## MongoDB Atlas Credentials
