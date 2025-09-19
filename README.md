@@ -77,6 +77,17 @@ This backend API is for a vaccine registration system similar to Cowin/ArogyaSet
 
 ## Project Setup
 
+### How to Run this project
+
+1. Clone repo  
+2. Install dependencies with `npm install`  
+3. Set up `.env` with MongoDB URI and JWT secret  
+4. Seed slots with `node scripts/prepopulateSlots.js`  
+5. Create admin user with `node scripts/createAdmin.js`  
+6. Run server with `npm start` or `npm run dev`
+
+---
+
 ### Prerequisites
 
 - Node.js installed (v14+ recommended)
